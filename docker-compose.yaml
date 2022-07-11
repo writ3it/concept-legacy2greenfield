@@ -7,18 +7,23 @@ services:
       MYSQL_DATABASE: "legacy_db"
       MYSQL_USER: "legacy_usr"
       MYSQL_PASSWORD: "legacy_pwd"
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: "legacy_root_pwd"
+      MYSQL_ROOT_HOST: "%"
 
     ports:
       - "3306:3306"
 
     volumes:
       - ./containers/legacy_database:/docker-entrypoint-initdb.d
+      - ./containers/legacy_database/conf:/etc/mysql/conf.d
+      - legacy_database_data:/var/lib/mysql
 
   legacy_app:
     build: containers/legacy_app/
+    depends_on:
+      - legacy_database
 
-  greenfield_app:
+  greenfield-app:
     build: ./containers/greenfield_app/
     environment:
       APACHE_DOCUMENT_ROOT: '/var/www/html/public'
@@ -28,3 +33,20 @@ services:
     ports:
       - "80:80"
       - "443:443"
+
+  mediator:
+    image: node
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - legacy_database
+      - greenfield-app
+    volumes:
+      - ./containers/mediator/:/home/node/app
+    command: node .
+
+volumes:
+  debezium_data:
+  legacy_database_data:

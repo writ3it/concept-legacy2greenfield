@@ -13,7 +13,7 @@ services:
       - "3306:3306"
 
     volumes:
-      - .docker/legacy_database:/docker-entrypoint-initdb.d
+      - containers/legacy_database:/docker-entrypoint-initdb.d
 
   legacy_app:
-    build: .docker/legacy_app/
+    build: containers/legacy_app/

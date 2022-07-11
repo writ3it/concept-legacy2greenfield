@@ -1,4 +1,8 @@
 FROM php:8.1-apache
+RUN apt-get update \
+    && apt-get install -y git unzip
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 

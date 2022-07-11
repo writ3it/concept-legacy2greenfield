@@ -29,10 +29,13 @@ services:
       APACHE_DOCUMENT_ROOT: '/var/www/html/public'
     volumes:
       - ./containers/greenfield_app:/var/www/html
-    
     ports:
       - "80:80"
       - "443:443"
+    command: >
+      bash -c "composer install
+      && chmod -R 777 vendor
+      && apache2-foreground"
 
   mediator:
     image: node
@@ -42,10 +45,15 @@ services:
       NODE_ENV: development
     depends_on:
       - legacy_database
+      - legacy_app
       - greenfield-app
     volumes:
       - ./containers/mediator/:/home/node/app
-    command: node .
+    command: >
+      bash -c "npm install
+      && chmod -R 777 node_modules
+      && node ."
+      
 
 volumes:
   debezium_data:

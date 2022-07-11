@@ -13,7 +13,18 @@ services:
       - "3306:3306"
 
     volumes:
-      - containers/legacy_database:/docker-entrypoint-initdb.d
+      - ./containers/legacy_database:/docker-entrypoint-initdb.d
 
   legacy_app:
     build: containers/legacy_app/
+
+  greenfield_app:
+    build: ./containers/greenfield_app/
+    environment:
+      APACHE_DOCUMENT_ROOT: '/var/www/html/public'
+    volumes:
+      - ./containers/greenfield_app:/var/www/html
+    
+    ports:
+      - "80:80"
+      - "443:443"

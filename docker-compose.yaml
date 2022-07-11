@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  legacy_database:
+    image: mariadb:10.4-focal
+    environment:
+      MYSQL_DATABASE: "legacy_db"
+      MYSQL_USER: "legacy_usr"
+      MYSQL_PASSWORD: "legacy_pwd"
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - .docker/legacy_database:/docker-entrypoint-initdb.d
+
+  legacy_app:
+    build: .docker/legacy_app/

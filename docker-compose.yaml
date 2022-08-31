@@ -12,7 +12,6 @@ services:
 
     ports:
       - "3306:3306"
-
     volumes:
       - ./containers/legacy_database:/docker-entrypoint-initdb.d
       - ./containers/legacy_database/conf:/etc/mysql/conf.d
@@ -22,6 +21,9 @@ services:
     build: containers/legacy_app/
     depends_on:
       - legacy_database
+    volumes:
+      - ./containers/legacy_app/:/code:ro
+    command: 'php /code/app.php'
 
   greenfield-app:
     build: ./containers/greenfield_app/

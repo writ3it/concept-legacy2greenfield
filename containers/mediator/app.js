@@ -29,9 +29,10 @@ const program = async () => {
       name: 'monitoring all statments',
       expression: 'legacy_db.*', // listen to TEST database !!!
       statement: MySQLEvents.STATEMENTS.ALL, // you can choose only insert for example MySQLEvents.STATEMENTS.INSERT, but here we are choosing everything
-      onEvent: e => {
-        console.log(e);
-        destination.post('/api/collector',e).then(function(response){
+      onEvent: event => {
+        let request = event;
+        console.log(request);
+        destination.post('/api/collector', request).then(function(response){
             console.log(response.status+" Consumed")
         })
       }

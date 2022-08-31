@@ -2,5 +2,5 @@
 server-id=1234
 log_bin=mysql-log_bin
 binlog_format     = ROW
-binlog_row_image  = FULL
+binlog_row_image  = noblob
 expire_logs_days  = 10
